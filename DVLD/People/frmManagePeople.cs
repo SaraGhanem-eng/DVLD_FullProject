@@ -4,6 +4,9 @@ using System;
 using System.Security.Policy;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using System.Data;
+using System.IO;
+
 namespace DVLD
 {
     public partial class frmManagePeople : Form
@@ -11,7 +14,10 @@ namespace DVLD
         public frmManagePeople()
         {
             InitializeComponent();
+
         }
+
+        private DataTable _dtAllPeople;
 
         private void btnAddNewPerson_Click(object sender, EventArgs e)
         {
@@ -22,8 +28,9 @@ namespace DVLD
 
         private void LoadPeople()
         {
-            dgvPeople.DataSource = clsPerson.GetAllPeople();
-            lblNumOfRecords.Text = dgvPeople.RowCount.ToString();
+            _dtAllPeople = clsPerson.GetAllPeople();
+            dgvPeople.DataSource = _dtAllPeople;
+
         }
        
         private string GetSelectedColumn(int SelectedIndex)
@@ -58,8 +65,8 @@ namespace DVLD
         private void frmManagePeople_Load(object sender, EventArgs e)
         {
             LoadPeople();
+            lblNumOfRecords.Text = dgvPeople.RowCount.ToString();
             cbFilterBy.SelectedIndex = 0;
-            
         }
 
         private void cbFilterBy_SelectedIndexChanged(object sender, EventArgs e)
@@ -74,15 +81,40 @@ namespace DVLD
 
         private void txtFilterBy_TextChanged(object sender, EventArgs e)
         {
-            if (cbFilterBy.SelectedIndex == 0 || txtFilterBy.Text == "")
+            string FilterColumn = GetSelectedColumn(cbFilterBy.SelectedIndex);
+
+   
+            //Reset the filters in case nothing selected or filter value conains nothing.
+            if (txtFilterBy.Text.Trim() == "" || FilterColumn == "None")
             {
-                LoadPeople();
-            
+                _dtAllPeople.DefaultView.RowFilter = "";
+                lblNumOfRecords.Text = dgvPeople.Rows.Count.ToString();
+                return;
             }
-            else 
-            {
-                dgvPeople.DataSource = clsPerson.FilterBy(GetSelectedColumn(cbFilterBy.SelectedIndex), txtFilterBy.Text);
-            }
+
+
+            if (FilterColumn == "PersonID")
+                //in this case we deal with integer not string.
+
+                _dtAllPeople.DefaultView.RowFilter = string.Format("[{0}] = {1}", FilterColumn, txtFilterBy.Text.Trim());
+            else
+                _dtAllPeople.DefaultView.RowFilter = string.Format("[{0}] LIKE '{1}%'", FilterColumn, txtFilterBy.Text.Trim());
+
+            lblNumOfRecords.Text = dgvPeople.Rows.Count.ToString();
+
+
+
+            // Filteration From Data Base (Query with each text_Changed event)
+
+            //if (cbFilterBy.SelectedIndex == 0 || txtFilterBy.Text == "")
+            //{
+            //    LoadPeople();
+
+            //}
+            //else 
+            //{
+            //    dgvPeople.DataSource = clsPerson.FilterBy(GetSelectedColumn(cbFilterBy.SelectedIndex), txtFilterBy.Text);
+            //}
         }
 
         private void txtFilterBy_KeyPress(object sender, KeyPressEventArgs e)
@@ -146,7 +178,7 @@ namespace DVLD
 
             if (dgvPeople.CurrentRow != null)
             {
-                int PersonID = Convert.ToInt32(dgvPeople.CurrentRow.Cells["PersonID"].Value);
+                int PersonID = Convert.ToInt32(dgvPeople.CurrentRow.Cells[0].Value);
                 frmAdd_EditPersonInfo frm = new frmAdd_EditPersonInfo(PersonID);
                 frm.ShowDialog();
                 LoadPeople();
@@ -158,12 +190,13 @@ namespace DVLD
         {
             if (dgvPeople.CurrentRow != null )
             {
-                int PersonID = Convert.ToInt32(dgvPeople.CurrentRow.Cells["PersonID"].Value);
+                int PersonID = Convert.ToInt32(dgvPeople.CurrentRow.Cells[0].Value);
                 clsPerson _Person = clsPerson.Find(PersonID);
                 if (_Person != null)
                 {
                     frmPresentPersonInfo frm = new frmPresentPersonInfo(_Person);
                     frm.ShowDialog();
+                    LoadPeople();
                 }
             }
         }
@@ -172,12 +205,20 @@ namespace DVLD
         {
             if (dgvPeople.CurrentRow != null)
             {
-                int PersonID = Convert.ToInt32(dgvPeople.CurrentRow.Cells["PersonID"].Value);
+                int PersonID = Convert.ToInt32(dgvPeople.CurrentRow.Cells[0 ].Value);
+                clsPerson Person = clsPerson.Find(PersonID);
+                string FullPath = Path.Combine( @"C:\DVLD-People-Images", Person._ImagePath
+            );
+
                 if (MessageBox.Show("Are you sure that you want to delete Person With ID [ " + dgvPeople.CurrentRow.Cells[0].Value
                  + " ]", "Confirm Delete Message ", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
                     if (clsPerson.DeletePerson(PersonID))
                     {
+                        if (Person._ImagePath != "")
+                        {
+                            File.Delete(FullPath);
+                        }
                         MessageBox.Show("Person Deleted Successfully ! " , "Deleted Successfuly ", MessageBoxButtons.OK , MessageBoxIcon.Information) ;
                         LoadPeople();
                     }
@@ -185,6 +226,21 @@ namespace DVLD
                     {
                         MessageBox.Show("Person Was Not Deleted Because it has data linked to it ! ", "Failed ! " , MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }
+            }
+        }
+
+        private void dgvPeople_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvPeople.CurrentRow != null)
+            {
+                int PersonID = Convert.ToInt32(dgvPeople.CurrentRow.Cells["PersonID"].Value);
+                clsPerson _Person = clsPerson.Find(PersonID);
+                if (_Person != null)
+                {
+                    frmPresentPersonInfo frm = new frmPresentPersonInfo(_Person);
+                    frm.ShowDialog();
+                    LoadPeople();
                 }
             }
         }

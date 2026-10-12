@@ -96,6 +96,33 @@ namespace DVLD.Business
 
         }
 
+        public static clsPerson Find(string NationalNo)
+        {
+            int PersonID = -1;
+            string FirstName = "";
+            string SecondName = "";
+            string ThirdName = "";
+            string LastName = "";
+            int Gender = 0;
+            string Address = "";
+            string Phone = "";
+            string Email = "";
+            int NationalityCountryID = 51;
+            string ImagePath = "";
+            DateTime DateOfBirth = DateTime.Now;
+
+            if (clsPersonData.FindPersonByNationalNumber(NationalNo, ref PersonID, ref FirstName, ref SecondName, ref ThirdName
+                , ref LastName, ref DateOfBirth, ref Gender, ref Address, ref Phone, ref Email, ref NationalityCountryID, ref ImagePath))
+            {
+                return new clsPerson(PersonID, NationalNo, FirstName, SecondName, ThirdName, LastName,
+                    DateOfBirth, Gender, Address, Phone, Email, NationalityCountryID, ImagePath);
+            }
+            else
+            {
+                return null;
+            }
+
+        }
         private bool _AddNewPerson()
         {
             this._PersonID = clsPersonData.AddPerson(this._NationalNo, this._FirstName, this._SecondName, this._ThirdName
@@ -145,6 +172,7 @@ namespace DVLD.Business
             return clsPersonData.IsPersonExistByNationalNoExceptPersonID(
                 NationalNo, PersonID);
         }
+        
         public bool Save()
         {
             switch(this._Mode)

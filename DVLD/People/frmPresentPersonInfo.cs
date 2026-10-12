@@ -22,6 +22,41 @@ namespace DVLD
             {
                 ctrlPersonCard1.LoadPersonInfo(_Person);
             }
+            else
+            {
+                MessageBox.Show("There is No Person Exist with this Data");
+                this.Close();
+            }
+        }
+
+        public frmPresentPersonInfo(int PersonID)
+        {
+            InitializeComponent();
+            _Person = clsPerson.Find(PersonID);
+            if (_Person != null )
+            {
+                ctrlPersonCard1.LoadPersonInfo(_Person);
+            }
+            else
+            {
+                MessageBox.Show("There is No Person Exist with this Data");
+                this.Close();
+            }
+        }
+
+        public frmPresentPersonInfo(string NationalNumber)
+        {
+            InitializeComponent();
+            _Person = clsPerson.Find(NationalNumber);
+            if (_Person != null)
+            {
+                ctrlPersonCard1.LoadPersonInfo(_Person);
+            }
+            else
+            {
+                MessageBox.Show("There is No Person Exist with this Data");
+                this.Close();
+            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)

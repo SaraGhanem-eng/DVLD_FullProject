@@ -51,12 +51,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\clsFormat.cs" />
-    <Compile Include="Classes\clsValidation.cs" />
-    <Compile Include="Controls\ctrlPersonCard.cs">
+    <Compile Include="GLobal Classes\clsFormat.cs" />
+    <Compile Include="GLobal Classes\clsUtil.cs" />
+    <Compile Include="GLobal Classes\clsValidation.cs" />
+    <Compile Include="People\Controls\ctrlPersonCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ctrlPersonCard.Designer.cs">
+    <Compile Include="People\Controls\ctrlPersonCard.Designer.cs">
       <DependentUpon>ctrlPersonCard.cs</DependentUpon>
     </Compile>
     <Compile Include="People\frmAdd_EditPersonInfo.cs">
@@ -85,7 +86,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Controls\ctrlPersonCard.resx">
+    <EmbeddedResource Include="People\Controls\ctrlPersonCard.resx">
       <DependentUpon>ctrlPersonCard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="People\frmAdd_EditPersonInfo.resx">

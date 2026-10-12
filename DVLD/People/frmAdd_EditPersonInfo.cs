@@ -7,12 +7,16 @@ using System.Diagnostics.Contracts;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
+using DVLD.GLobal_Classes;
 
 namespace DVLD
 {
     public partial class frmAdd_EditPersonInfo : Form
     {
-         public enum enMode { AddNew = 0 , Update = 1 } ;
+        public delegate void DataBackEventHandler(object sender, int PersonID);
+        public event DataBackEventHandler DataBack;
+
+        public enum enMode { AddNew = 0 , Update = 1 } ;
          private enum enValidationType
         {
             Required =1  ,
@@ -26,7 +30,7 @@ namespace DVLD
          int _PersonID;
          private enum enImageState
          {
-            None, // nothing changed on the Image state
+            None, // Default Value , No action needs to be exist .
             New,
             Removed
          }
@@ -35,8 +39,6 @@ namespace DVLD
          private string _ImagesFolder = @"C:\DVLD-People-Images";
          private string _SelectedImagePath = ""; 
 
-        
-        
         public frmAdd_EditPersonInfo(int PersonID)
         {
             InitializeComponent();
@@ -53,19 +55,7 @@ namespace DVLD
             }
         }
 
-        private void _SetValidateRules()
-        {
-            txtFirstName.Tag = enValidationType.Required | enValidationType.Letters;
-            txtSecondName.Tag = enValidationType.Required | enValidationType.Letters;
-            txtLastName.Tag = enValidationType.Required | enValidationType.Letters;
-            txtAddress.Tag = enValidationType.Required ;
-            txtPhone.Tag = enValidationType.Required | enValidationType.Numbers;
-            txtThirdName.Tag = enValidationType.Letters;
-            txtEmail.Tag = enValidationType.Email;
-            txtNationalNo.Tag = enValidationType.Required | enValidationType.LettersAndNumbers;
-            
-        }
-
+        // Image Handling
         private void _SelectImage()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -79,57 +69,8 @@ namespace DVLD
                 pbPerson.Load(_SelectedImagePath);
 
                 llRemoveImage.Visible = true;
+                // set image state in case selctind one
                 _ImageState = enImageState.New;
-            }
-        }
-
-        private bool _DeleteImage(string ImagePath)
-        {
-            if (string.IsNullOrEmpty(ImagePath))
-                return true;
-
-            string FullImagePath = Path.Combine(_ImagesFolder, ImagePath);
-
-            if (!File.Exists(FullImagePath))
-                return true;
-
-            try
-            {
-                File.Delete(FullImagePath);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        private bool _SaveImage()
-        {
-            if (string.IsNullOrEmpty(_SelectedImagePath))
-                return false;
-
-            if (!Directory.Exists(_ImagesFolder))
-            {
-                Directory.CreateDirectory(_ImagesFolder);
-            }
-
-            string FileExtension = Path.GetExtension(_SelectedImagePath);
-
-            string NewFileName = Guid.NewGuid().ToString() + FileExtension;
-
-            string NewImagePath = Path.Combine(_ImagesFolder, NewFileName);
-
-            try
-            {
-                File.Copy(_SelectedImagePath, NewImagePath);
-
-                _Person._ImagePath = NewFileName;
-
-                return true;
-            }
-            catch
-            {
-                return false;
             }
         }
 
@@ -143,8 +84,13 @@ namespace DVLD
                 }
                 case enImageState.New:
                 {
-                    return _SaveImage();
-
+                        string NewFilePath = "";
+                        if (clsUtil._SaveImage(_SelectedImagePath , ref NewFilePath))
+                        { 
+                            _Person._ImagePath = NewFilePath;
+                            return true;
+                        }
+                        return false;
                 }
                 case enImageState.Removed:
                 {
@@ -165,6 +111,7 @@ namespace DVLD
 
         private void llRemoveImage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            // Set image state in case removing picture 
             _ImageState = enImageState.Removed;
             _SelectedImagePath = "";
             if (_Person._Gender == 0)
@@ -179,6 +126,19 @@ namespace DVLD
             llRemoveImage.Visible = false;
         }
 
+        // Validation Handling
+        private void _SetValidateRules()
+        {
+            txtFirstName.Tag = enValidationType.Required | enValidationType.Letters;
+            txtSecondName.Tag = enValidationType.Required | enValidationType.Letters;
+            txtLastName.Tag = enValidationType.Required | enValidationType.Letters;
+            txtAddress.Tag = enValidationType.Required;
+            txtPhone.Tag = enValidationType.Required | enValidationType.Numbers;
+            txtThirdName.Tag = enValidationType.Letters;
+            txtEmail.Tag = enValidationType.Email;
+            txtNationalNo.Tag = enValidationType.Required | enValidationType.LettersAndNumbers;
+
+        }
 
         private bool _ValidateTextBox(TextBox textBox, enValidationType vtype, ErrorProvider errorProvider)
         {
@@ -244,7 +204,7 @@ namespace DVLD
             errorProvider.SetError(textBox, "");
             return true;
         }
-
+      
         private bool _ValidateTextBoxes(Control parent)
         {
             foreach (Control control in parent.Controls)
@@ -267,6 +227,60 @@ namespace DVLD
 
             return true;
         }
+
+        // this event (TextBox_Validating) is called by each text box in the form .
+        private void TextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            enValidationType rules = (enValidationType)textBox.Tag;
+
+            _ValidateTextBox(textBox, rules, errorProvider1);
+        }
+
+        private bool _ValidateBeforeSave()
+        {
+            if (!_ValidateTextBoxes(this))
+                return false;
+
+            if (!_ValidateNationalNo())
+                return false;
+
+
+            return true;
+        }
+
+        private bool _ValidateNationalNo()
+        {
+            if (_Mode == enMode.AddNew)
+            {
+                if (clsPerson.IsPersonExist(txtNationalNo.Text))
+                {
+                    errorProvider1.SetError(
+                        txtNationalNo,
+                        "National No already exists");
+
+                    return false;
+                }
+            }
+            else // Update
+            {
+                if (clsPerson.IsPersonExistExceptPersonID(
+                    txtNationalNo.Text, _PersonID))
+                {
+                    errorProvider1.SetError(
+                        txtNationalNo,
+                        "National No already exists");
+
+                    return false;
+                }
+            }
+
+            errorProvider1.SetError(txtNationalNo, "");
+
+            return true;
+        }
+
+        // form initialization 
         private void _Load()
         {
             //  Prepare the form
@@ -279,7 +293,7 @@ namespace DVLD
             {
                 _Person = new clsPerson();
             }
-            else 
+            else
             {
                 _Person = clsPerson.Find(_PersonID);
 
@@ -300,7 +314,7 @@ namespace DVLD
                 lblAddUpdate.Text = "Add New Person";
 
                 rbMale.Checked = true;
-                cbCountry.SelectedIndex = 50;
+                cbCountry.SelectedIndex = cbCountry.FindString("Egypt");
 
                 return;
             }
@@ -340,7 +354,8 @@ namespace DVLD
             {
                 llRemoveImage.Visible = true;
                 string FullImagePath = Path.Combine(_ImagesFolder, _Person._ImagePath);
-                pbPerson.Load(FullImagePath);
+                pbPerson.ImageLocation = FullImagePath;
+               // pbPerson.Load(FullImagePath);
             }
             else
             {
@@ -354,6 +369,7 @@ namespace DVLD
                 }
             }
         }
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -370,59 +386,9 @@ namespace DVLD
             }
         }
 
-        private bool _ValidateNationalNo()
-        {
-            if (_Mode == enMode.AddNew)
-            {
-                if (clsPerson.IsPersonExist(txtNationalNo.Text))
-                {
-                    errorProvider1.SetError(
-                        txtNationalNo,
-                        "National No already exists");
-
-                    return false;
-                }
-            }
-            else // Update
-            {
-                if (clsPerson.IsPersonExistExceptPersonID(
-                    txtNationalNo.Text, _PersonID))
-                {
-                    errorProvider1.SetError(
-                        txtNationalNo,
-                        "National No already exists");
-
-                    return false;
-                }
-            }
-
-            errorProvider1.SetError(txtNationalNo, "");
-
-            return true;
-        }
         private void frmAdd_EditPersonInfo_Load(object sender, EventArgs e)
         {
             _Load();
-        }
-
-        private void TextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            TextBox textBox = (TextBox)sender;
-            enValidationType rules = (enValidationType)textBox.Tag;
-
-            _ValidateTextBox(textBox, rules, errorProvider1);
-        }
-
-        private bool _ValidateBeforeSave()
-        {
-            if (!_ValidateTextBoxes(this))
-                return false;
-
-            if (!_ValidateNationalNo())
-                return false;
-
-            
-            return true;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -465,7 +431,7 @@ namespace DVLD
                 if (_ImageState != enImageState.None &&
                    !string.IsNullOrEmpty(OldImagePath))
                 {
-                   if (! _DeleteImage(OldImagePath))
+                   if (!clsUtil.DeleteImage(OldImagePath))
                     {
                         MessageBox.Show("Failed to delete Old Image !");
                     }
@@ -478,6 +444,8 @@ namespace DVLD
                 lblAddUpdate.Text = "Update Person";
                 lblPersonID.Text = _Person._PersonID.ToString();
 
+                // Trigger the event to send data back to the caller form.
+                DataBack?.Invoke(this, _Person._PersonID);
             }
             else
             {
@@ -505,6 +473,5 @@ namespace DVLD
         }
 
 
-    
     }
 }

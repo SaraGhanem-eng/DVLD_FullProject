@@ -80,6 +80,76 @@ namespace DVLD.DataAccess
 
         }
 
+
+        static public bool FindPersonByNationalNumber(string NationalNumber, ref int PersonID, ref string FirstName,
+                                  ref string SecondName, ref string ThirdName, ref string LastName,
+                                  ref DateTime DateOfBirth, ref int Gender, ref string Address, ref string Phone,
+                                  ref string Email, ref int NationalityCountryID, ref string ImagePath)
+        {
+            bool isFound = false;
+
+            SqlConnection connection = new SqlConnection(connectionString);
+            string Query = "Select * from People where NationalNo = @NationalNo";
+            SqlCommand command = new SqlCommand(Query, connection);
+
+            command.Parameters.AddWithValue("NationalNo", NationalNumber);
+
+
+            try
+            {
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+
+                if (reader.Read())
+                {
+                    isFound = true;
+                    PersonID = (int)reader["PersonID"];
+                    FirstName = (string)reader["FirstName"];
+                    SecondName = (string)reader["SecondName"];
+                    LastName = (string)reader["LastName"];
+                    Phone = (string)reader["Phone"];
+                    DateOfBirth = (DateTime)reader["DateOfBirth"];
+                    Gender = Convert.ToInt32(reader["Gender"]);
+                    Address = (string)reader["Address"];
+                    NationalityCountryID = (int)reader["NationalityCountryID"];
+
+
+                    if (reader["ThirdName"] != DBNull.Value)
+                        ThirdName = (string)reader["ThirdName"];
+                    else
+                        ThirdName = "";
+
+                    if (reader["Email"] != DBNull.Value)
+                        Email = (string)reader["Email"];
+                    else
+                        Email = "";
+
+
+                    if (reader["ImagePath"] != DBNull.Value)
+                        ImagePath = (string)reader["ImagePath"];
+                    else
+                        ImagePath = "";
+
+
+
+                }
+                reader.Close();
+            }
+            catch (Exception Ex)
+            {
+                string Error = Ex.Message;
+
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return isFound;
+
+        }
+
         static public int AddPerson( string NationalNo,string FirstName,
                                            string SecondName, string ThirdName, string LastName,
                                            DateTime DateOfBirth, int Gender, string Address, string Phone,

@@ -38,6 +38,7 @@ namespace DVLD.Controls
             {
                 if (_Person._Gender == 0)
                 {
+                   
                     PBPerson.Load("C:\\Users\\sara\\Downloads\\Icons\\Icons\\Male 512.png");
                 }
                 else if (_Person._Gender == 1)
@@ -48,10 +49,22 @@ namespace DVLD.Controls
             else
             {
                 string FullImagePath = Path.Combine(_ImagesFolder, _Person._ImagePath);
-                PBPerson.Load(FullImagePath);
+                PBPerson.ImageLocation = FullImagePath;
+               // PBPerson.Load(FullImagePath);
      
             }
         }
 
+        private void llEditPerson_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmAdd_EditPersonInfo frm = new frmAdd_EditPersonInfo(_Person._PersonID);
+            
+            frm.ShowDialog();
+
+            //reload the object from data base 
+            _Person = clsPerson.Find(_Person._PersonID);
+            LoadPersonInfo(_Person);
+   
+        }
     }
 }

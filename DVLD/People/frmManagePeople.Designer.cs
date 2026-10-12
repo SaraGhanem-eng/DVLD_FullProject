@@ -76,6 +76,7 @@
             this.dgvPeople.ReadOnly = true;
             this.dgvPeople.Size = new System.Drawing.Size(1138, 271);
             this.dgvPeople.TabIndex = 2;
+            this.dgvPeople.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPeople_CellDoubleClick);
             // 
             // cmsManagePeople
             // 
