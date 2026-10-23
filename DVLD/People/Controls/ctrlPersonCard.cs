@@ -1,8 +1,9 @@
-﻿using System;
-using DVLD.Business;
-using System.Windows.Forms;
+﻿using DVLD.Business;
 using DVLD.Classes;
+using DVLD.Properties;
+using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace DVLD.Controls
 {
@@ -13,11 +14,30 @@ namespace DVLD.Controls
             InitializeComponent();
         }
         private clsPerson _Person;
+        public clsPerson SelectedPersonInfo
+        {
+            get { return _Person; }
+        }
+
+        int _PersonID = -1;
+        public int PersonID
+        {
+            get { return _PersonID; }
+        }
         private string _ImagesFolder = @"C:\DVLD-People-Images";
         public void LoadPersonInfo(clsPerson Person)
         {
-            _Person = Person;
+            if (Person == null)
+            {
+                ResetPersonInfo();
+                MessageBox.Show("This Person Is Not Exist in the System !" , "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
 
+            }
+
+            _PersonID = Person._PersonID;
+            _Person = Person;
+            llEditPerson.Enabled = true;
             lblPersonID.Text = _Person._PersonID.ToString();
 
             lblName.Text = _Person._FirstName.ToString() + " " +
@@ -65,6 +85,28 @@ namespace DVLD.Controls
             _Person = clsPerson.Find(_Person._PersonID);
             LoadPersonInfo(_Person);
    
+        }
+
+        public void ResetPersonInfo()
+        {
+            _PersonID = -1;
+            _Person = null;
+            lblPersonID.Text = "[????]";
+            lblNationalNo.Text = "[????]";
+            lblName.Text = "[????]";
+            PBPerson.Image = Resources.Man_32;
+            lblGender.Text = "[????]";
+            lblEmail.Text = "[????]";
+            lblPhone.Text = "[????]";
+            lblDateOfBirth.Text = "[????]";
+            lblCountry.Text = "[????]";
+            lblAddress.Text = "[????]";
+            PBPerson.Image = Resources.Male_512;
+            llEditPerson.Enabled = false;
+        }
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

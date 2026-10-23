@@ -16,7 +16,7 @@ namespace DVLD
         public delegate void DataBackEventHandler(object sender, int PersonID);
         public event DataBackEventHandler DataBack;
 
-        public enum enMode { AddNew = 0 , Update = 1 } ;
+         public enum enMode { AddNew = 0 , Update = 1 } ;
          private enum enValidationType
         {
             Required =1  ,
@@ -441,6 +441,7 @@ namespace DVLD
 
 
                 _Mode = enMode.Update;
+                _PersonID = _Person._PersonID; 
                 lblAddUpdate.Text = "Update Person";
                 lblPersonID.Text = _Person._PersonID.ToString();
 
@@ -472,6 +473,9 @@ namespace DVLD
             }
         }
 
+        private void txtNationalNo_TextChanged(object sender, EventArgs e)
+        {
 
+        }
     }
 }

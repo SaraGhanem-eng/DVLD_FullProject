@@ -40,6 +40,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.llEditPerson = new System.Windows.Forms.LinkLabel();
             this.lblDateOfBirth = new System.Windows.Forms.Label();
             this.lblPhone = new System.Windows.Forms.Label();
             this.lblCountry = new System.Windows.Forms.Label();
@@ -57,7 +58,6 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.llEditPerson = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -206,11 +206,26 @@
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.pictureBox4);
             this.groupBox1.Controls.Add(this.pictureBox3);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(811, 281);
             this.groupBox1.TabIndex = 50;
             this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Person Information";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // llEditPerson
+            // 
+            this.llEditPerson.AutoSize = true;
+            this.llEditPerson.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.llEditPerson.Location = new System.Drawing.Point(669, 240);
+            this.llEditPerson.Name = "llEditPerson";
+            this.llEditPerson.Size = new System.Drawing.Size(82, 20);
+            this.llEditPerson.TabIndex = 71;
+            this.llEditPerson.TabStop = true;
+            this.llEditPerson.Text = "Edit Person";
+            this.llEditPerson.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llEditPerson_LinkClicked);
             // 
             // lblDateOfBirth
             // 
@@ -348,7 +363,7 @@
             this.label16.Image = global::DVLD.Properties.Resources.Drivers_64;
             this.label16.Location = new System.Drawing.Point(284, 152);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(0, 13);
+            this.label16.Size = new System.Drawing.Size(0, 18);
             this.label16.TabIndex = 57;
             // 
             // label15
@@ -380,18 +395,6 @@
             this.label13.Size = new System.Drawing.Size(113, 21);
             this.label13.TabIndex = 51;
             this.label13.Text = "Date Of Birth:";
-            // 
-            // llEditPerson
-            // 
-            this.llEditPerson.AutoSize = true;
-            this.llEditPerson.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.llEditPerson.Location = new System.Drawing.Point(669, 240);
-            this.llEditPerson.Name = "llEditPerson";
-            this.llEditPerson.Size = new System.Drawing.Size(82, 20);
-            this.llEditPerson.TabIndex = 71;
-            this.llEditPerson.TabStop = true;
-            this.llEditPerson.Text = "Edit Person";
-            this.llEditPerson.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llEditPerson_LinkClicked);
             // 
             // ctrlPersonCard
             // 
