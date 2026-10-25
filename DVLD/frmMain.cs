@@ -1,5 +1,7 @@
-﻿using DVLD.GLobal_Classes;
+﻿using DVLD.Application_Types;
+using DVLD.GLobal_Classes;
 using DVLD.Login;
+using DVLD.Tests_Types;
 using DVLD.Users;
 using System;
 using System.Collections.Generic;
@@ -50,6 +52,18 @@ namespace DVLD
         private void changePasswordToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form frm = new frmChangePassword(clsGlobalInfo.CurrentUser.UserID);
+            frm.ShowDialog();
+        }
+
+        private void manageApplicationTypesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form frm = new frmManageApplicationTypes();
+            frm.ShowDialog();
+        }
+
+        private void manageATestTypeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form frm = new frmManageTestTypes();
             frm.ShowDialog();
         }
     }
