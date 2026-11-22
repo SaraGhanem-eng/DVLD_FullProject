@@ -29,7 +29,7 @@ namespace DVLD.Tests_Types
                 this.Close();
                 return;
             }
-            _Test = clsTestsTypes.Find(_TestTypeID);
+            _Test = clsTestsTypes.Find((clsTestsTypes.enTestType)_TestTypeID);
 
             if (_Test == null)
             {
@@ -37,7 +37,7 @@ namespace DVLD.Tests_Types
                 return;
             }
 
-            lblID.Text = _Test.TestTypeID.ToString();
+            lblID.Text = _Test.ID.ToString();
             txtTitle.Text = _Test.TestTypeTitle;
             txtDescription.Text = _Test.TestTypeDescription;
             txtFees.Text = _Test.Fees.ToString();
@@ -66,7 +66,7 @@ namespace DVLD.Tests_Types
 
         private void txtDescription_Validating(object sender, CancelEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtDescription.Text))
+            if (string.IsNullOrWhiteSpace(txtDescription.Text))
             {
                 e.Cancel = true;
                 errorProvider1.SetError(txtDescription, "Description Can Not Be Empty ! ");
@@ -79,16 +79,6 @@ namespace DVLD.Tests_Types
 
         private void txtFees_Validating(object sender, CancelEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtFees.Text))
-            {
-                e.Cancel = true;
-                errorProvider1.SetError(txtFees, "Fees Can Not Be Empty ! ");
-            }
-            else
-            {
-                errorProvider1.SetError(txtFees, "");
-            }
-
             if (!double.TryParse(txtFees.Text, out double fees) || fees < 0)
             {
                 e.Cancel = true;

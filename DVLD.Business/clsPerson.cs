@@ -27,6 +27,10 @@ namespace DVLD.Business
         public string _ImagePath { set; get; }
         public enMode _Mode { set; get; }
 
+        public string FullName
+        {
+            get { return _FirstName + " " + _SecondName + " " + _ThirdName + " " + _LastName; }
+        }
 
         private clsPerson(int PersonID , string NationalNo, string FirstName,
                                            string SecondName, string ThirdName, string LastName,

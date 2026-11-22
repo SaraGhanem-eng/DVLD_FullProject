@@ -40,6 +40,7 @@ namespace DVLD.People.Controls
             }
         }
         
+
         public clsPerson SelectedPersonInfo
         {
             get { return ctrlPersonCard1.SelectedPersonInfo; }
@@ -93,12 +94,13 @@ namespace DVLD.People.Controls
                     break;
             }
 
-            if (ctrlPersonCard1.SelectedPersonInfo == null)
-                return;
-
-            if (OnPersonSelected != null && FilterEnabled)
-                // Raise the event with a parameter
-                OnPersonSelected(ctrlPersonCard1.PersonID);
+            if (FilterEnabled && OnPersonSelected != null)
+            {
+                if (ctrlPersonCard1.SelectedPersonInfo == null)
+                    OnPersonSelected(-1);
+                else
+                    OnPersonSelected(ctrlPersonCard1.PersonID);
+            }
         }
 
         private void txtFilterValue_Validating(object sender, CancelEventArgs e)
@@ -170,6 +172,11 @@ namespace DVLD.People.Controls
             cbFilterBy.SelectedIndex = 1;
             txtFilterValue.Text = PersonID.ToString();
             FindNow();
+        }
+
+        public void SetFilterFocus()
+        {
+            txtFilterValue.Focus();
         }
     }
 }

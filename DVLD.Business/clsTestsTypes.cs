@@ -8,29 +8,32 @@ namespace DVLD.Business
     public class clsTestsTypes
     {
 
-        public int TestTypeID { set; get; }
+        public enum enTestType { VisionTest = 1, WrittenTest = 2, StreetTest = 3 };
+
+        public clsTestsTypes.enTestType ID { set; get; }
         public string TestTypeTitle { set; get; }
         public string TestTypeDescription { set; get; }
         public double Fees { set; get; }
 
         public clsTestsTypes()
         {
-            TestTypeID = -1;
+
+            ID = clsTestsTypes.enTestType.VisionTest;
             TestTypeTitle = "";
             TestTypeDescription = "";
             Fees = 0;
         }
 
-        private clsTestsTypes(int TestTypeID, string TestTypeTitle, string TestTypeDescription ,double Fees)
+        private clsTestsTypes(clsTestsTypes.enTestType ID, string TestTypeTitle, string TestTypeDescription ,double Fees)
         {
-            this.TestTypeID = TestTypeID ;
+            this.ID = ID ;
             this.TestTypeTitle = TestTypeTitle;
             this.TestTypeDescription = TestTypeDescription;
             this.Fees = Fees;
 
         }
 
-        public static clsTestsTypes Find(int TestTypeID)
+        public static clsTestsTypes Find( clsTestsTypes.enTestType TestTypeID)
         {
 
             string TestTypeTilte = "";
@@ -38,7 +41,7 @@ namespace DVLD.Business
             double Fees = 0;
 
 
-            if (clsTestsTypesData.FindTestTypeByID(TestTypeID ,ref TestTypeTilte , ref TestTypeDescription, ref Fees))
+            if (clsTestsTypesData.FindTestTypeByID((int)TestTypeID ,ref TestTypeTilte , ref TestTypeDescription, ref Fees))
             {
                 return new clsTestsTypes(TestTypeID ,TestTypeTilte , TestTypeDescription , Fees );
             }
@@ -51,7 +54,7 @@ namespace DVLD.Business
 
         public bool UpdateTestType()
         {
-            return (clsTestsTypesData.UpdateTestType(this.TestTypeID, this.TestTypeTitle, this.TestTypeDescription ,this.Fees));
+            return (clsTestsTypesData.UpdateTestType((int)this.ID, this.TestTypeTitle, this.TestTypeDescription ,this.Fees));
         }
 
         public static DataTable GetTestTypes()

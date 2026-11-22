@@ -50,23 +50,24 @@ namespace DVLD.Users
 
         private void CtrlPersonCardWithFilter2_OnPersonSelected(int PersonID)
         {
-            // Event Handler
-            if (_Mode == enMode.enAddNew)
+            if (_Mode != enMode.enAddNew)
+                return;
+
+            if (PersonID == -1)
             {
+                btnNext.Enabled = false;
+                return;
+            }
 
-                btnNext.Enabled = !clsUsers.IsUserExistByPersonID(PersonID);
+            btnNext.Enabled = !clsUsers.IsUserExistByPersonID(PersonID);
 
-                bool IsValid = btnNext.Enabled ? true : false;
-                if (!IsValid)
-                {
-                    MessageBox.Show(
+            if (!btnNext.Enabled)
+            {
+                MessageBox.Show(
                     "Selected Person Already Has A User, Choose Another One",
                     "Select Another Person",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                }
-
-
             }
         }
 

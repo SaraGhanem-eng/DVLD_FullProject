@@ -31,6 +31,7 @@ namespace DVLD
             _dtAllPeople = clsPerson.GetAllPeople();
             dgvPeople.DataSource = _dtAllPeople;
 
+            
         }
        
         private string GetSelectedColumn(int SelectedIndex)

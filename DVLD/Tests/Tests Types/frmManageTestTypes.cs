@@ -53,17 +53,16 @@ namespace DVLD.Tests_Types
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (dgvTestTypes.CurrentRow != null)
-            {
-                int TypeID = Convert.ToInt32(dgvTestTypes.CurrentRow.Cells[0].Value);
-                clsTestsTypes Type = clsTestsTypes.Find(TypeID);
-                if (Type != null)
-                {
-                    frmEditTestType frm = new frmEditTestType(TypeID);
-                    frm.ShowDialog();
-                    _LoadTestTypes();
-                }
-            }
+            if (dgvTestTypes.CurrentRow == null)
+                return;
+
+            int TypeID = Convert.ToInt32(
+                dgvTestTypes.CurrentRow.Cells[0].Value);
+
+            frmEditTestType frm = new frmEditTestType(TypeID);
+            frm.ShowDialog();
+
+            _LoadTestTypes();
         }
     }
 }

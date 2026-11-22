@@ -9,20 +9,25 @@ namespace DVLD.Business
     public class clsApplicationTypes
     {
 
-        public int ApplicationTypeID { set; get; }
+        public enum enApplicationType
+        {
+            NewDrivingLicense = 1, RenewDrivingLicense = 2, ReplaceLostDrivingLicense = 3,
+            ReplaceDamagedDrivingLicense = 4, ReleaseDetainedDrivingLicsense = 5, NewInternationalLicense = 6, RetakeTest = 7
+        };
+        public enApplicationType ApplicationTypeID { set; get; }
         public string ApplicationTypeTitle { set; get; }
         public double Fees { set; get; }
 
         public clsApplicationTypes()
         {
-            ApplicationTypeID = -1;
+            ApplicationTypeID = enApplicationType.NewDrivingLicense;
             ApplicationTypeTitle = "";
             Fees = 0;
         }
 
         private clsApplicationTypes(int ApplicationTypeID , string ApplicationTypeTitle , double Fees )
         {
-            this.ApplicationTypeID = ApplicationTypeID;
+            this.ApplicationTypeID =(enApplicationType) ApplicationTypeID;
             this.ApplicationTypeTitle = ApplicationTypeTitle;
             this.Fees = Fees;
 
@@ -48,7 +53,7 @@ namespace DVLD.Business
 
         public  bool UpdateApplicationType()
         {
-            return (clsApplicationTypesData.UpdateApplicationType(this.ApplicationTypeID, this.ApplicationTypeTitle, this.Fees)); 
+            return (clsApplicationTypesData.UpdateApplicationType((int)this.ApplicationTypeID, this.ApplicationTypeTitle, this.Fees)); 
         }
 
         public static DataTable GetApplicationTypes()

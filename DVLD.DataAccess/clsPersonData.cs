@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Permissions;
+
 
 namespace DVLD.DataAccess
 {
@@ -79,7 +78,6 @@ namespace DVLD.DataAccess
             return isFound;
 
         }
-
 
         static public bool FindPersonByNationalNumber(string NationalNumber, ref int PersonID, ref string FirstName,
                                   ref string SecondName, ref string ThirdName, ref string LastName,

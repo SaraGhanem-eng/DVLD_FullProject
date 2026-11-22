@@ -118,9 +118,9 @@
             // pbPersonImage
             // 
             this.pbPersonImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pbPersonImage.Image = global::DVLD.Properties.Resources.Application_Types_512;
+            this.pbPersonImage.Image = global::DVLD.Properties.Resources.Schedule_Test_512;
             this.pbPersonImage.InitialImage = null;
-            this.pbPersonImage.Location = new System.Drawing.Point(211, 22);
+            this.pbPersonImage.Location = new System.Drawing.Point(225, 35);
             this.pbPersonImage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pbPersonImage.Name = "pbPersonImage";
             this.pbPersonImage.Size = new System.Drawing.Size(186, 127);
