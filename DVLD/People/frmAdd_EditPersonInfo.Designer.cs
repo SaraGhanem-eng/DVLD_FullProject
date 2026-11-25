@@ -93,8 +93,8 @@
             // 
             this.lblAddUpdate.AutoSize = true;
             this.lblAddUpdate.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddUpdate.ForeColor = System.Drawing.Color.Maroon;
-            this.lblAddUpdate.Location = new System.Drawing.Point(314, 33);
+            this.lblAddUpdate.ForeColor = System.Drawing.Color.Teal;
+            this.lblAddUpdate.Location = new System.Drawing.Point(274, 9);
             this.lblAddUpdate.Name = "lblAddUpdate";
             this.lblAddUpdate.Size = new System.Drawing.Size(271, 45);
             this.lblAddUpdate.TabIndex = 0;
@@ -104,7 +104,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(31, 114);
+            this.label2.Location = new System.Drawing.Point(38, 62);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(85, 20);
             this.label2.TabIndex = 1;
@@ -114,7 +114,7 @@
             // 
             this.lblPersonID.AutoSize = true;
             this.lblPersonID.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPersonID.Location = new System.Drawing.Point(165, 114);
+            this.lblPersonID.Location = new System.Drawing.Point(175, 62);
             this.lblPersonID.Name = "lblPersonID";
             this.lblPersonID.Size = new System.Drawing.Size(39, 20);
             this.lblPersonID.TabIndex = 2;
@@ -159,9 +159,9 @@
             this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label4);
-            this.panel1.Location = new System.Drawing.Point(34, 151);
+            this.panel1.Location = new System.Drawing.Point(12, 99);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(865, 299);
+            this.panel1.Size = new System.Drawing.Size(842, 299);
             this.panel1.TabIndex = 3;
             // 
             // pictureBox1
@@ -472,7 +472,7 @@
             // txtFirstName
             // 
             this.txtFirstName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtFirstName.Location = new System.Drawing.Point(180, 30);
+            this.txtFirstName.Location = new System.Drawing.Point(193, 32);
             this.txtFirstName.Name = "txtFirstName";
             this.txtFirstName.Size = new System.Drawing.Size(144, 23);
             this.txtFirstName.TabIndex = 8;
@@ -539,7 +539,7 @@
             this.btnSave.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSave.Image = global::DVLD.Properties.Resources.Save_32;
             this.btnSave.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.btnSave.Location = new System.Drawing.Point(657, 469);
+            this.btnSave.Location = new System.Drawing.Point(611, 413);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(109, 37);
             this.btnSave.TabIndex = 42;
@@ -555,7 +555,7 @@
             this.btnClose.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose.Image = global::DVLD.Properties.Resources.Close_32;
             this.btnClose.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.btnClose.Location = new System.Drawing.Point(790, 469);
+            this.btnClose.Location = new System.Drawing.Point(744, 413);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(109, 37);
             this.btnClose.TabIndex = 41;
@@ -567,7 +567,7 @@
             // pictureBox10
             // 
             this.pictureBox10.Image = global::DVLD.Properties.Resources.Number_32;
-            this.pictureBox10.Location = new System.Drawing.Point(122, 113);
+            this.pictureBox10.Location = new System.Drawing.Point(132, 61);
             this.pictureBox10.Name = "pictureBox10";
             this.pictureBox10.Size = new System.Drawing.Size(32, 32);
             this.pictureBox10.TabIndex = 38;
@@ -577,7 +577,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(955, 530);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(864, 462);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.pictureBox10);

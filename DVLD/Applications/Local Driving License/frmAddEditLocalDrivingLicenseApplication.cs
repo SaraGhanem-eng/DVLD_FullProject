@@ -161,7 +161,14 @@ namespace DVLD.Applications.Local_Driving_License
                 _LocalApplciation.PaidFees = Convert.ToDouble(lblFees.Text);
             }
 
-                int ExistApplicationID = clsLocalDrivingLicenseApplication.GetActiveApplicationIDForLicenseClass (_LocalApplciation.ApplicantPersonID, Convert.ToInt32(cbLicenseClass.SelectedValue));
+            if (clsLicense.IsLicenseExistByPersonID(_LocalApplciation.ApplicantPersonID, _LocalApplciation.LicenseClassID))
+            {
+                MessageBox.Show("Person Has Already a license with the same Applied driving class , Choose another License Class ", "Not Allowed ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+
+            int ExistApplicationID = clsLocalDrivingLicenseApplication.GetActiveApplicationIDForLicenseClass (_LocalApplciation.ApplicantPersonID, Convert.ToInt32(cbLicenseClass.SelectedValue));
 
                 if (ExistApplicationID != -1 && (_Mode == enMode.AddNew || ExistApplicationID != _LocalApplciation.ApplicationID))
                 {

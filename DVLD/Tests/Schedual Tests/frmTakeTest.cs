@@ -116,6 +116,13 @@ namespace DVLD.Tests.Schedual_Tests
                     "Missing Result", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (clsTests.HasPassedTest(_TestAppointmentInfo.LocalDrivingLicenseApplicationID ,(int)_TestAppointmentInfo.TestTypeID))
+            {
+                MessageBox.Show("You have already passed this test. You cannot take it again. ",
+                "Test Already Passed", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                this.Close();
+                return;
+            }
             clsTests Test = new clsTests();
             Test.TestAppointmentID = _TestAppointmentID;
             Test.TestResult = (rbPass.Checked);

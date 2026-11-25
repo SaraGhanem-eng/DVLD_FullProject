@@ -91,7 +91,7 @@
             this.sendEmailToolStripMenuItem,
             this.phoneCallToolStripMenuItem});
             this.cmsManagePeople.Name = "cmsManagePeople";
-            this.cmsManagePeople.Size = new System.Drawing.Size(196, 194);
+            this.cmsManagePeople.Size = new System.Drawing.Size(196, 172);
             // 
             // showDetailsToolStripMenuItem
             // 

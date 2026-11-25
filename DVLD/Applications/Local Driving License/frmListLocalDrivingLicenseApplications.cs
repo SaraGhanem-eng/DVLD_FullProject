@@ -1,5 +1,7 @@
 ﻿using DVLD.Business;
 using DVLD.Classes;
+using DVLD.License;
+using DVLD.License.Local_License;
 using DVLD.Tests.Schedual_Tests;
 using DVLD.Users;
 using System;
@@ -271,22 +273,20 @@ namespace DVLD.Applications.Local_Driving_License
 
             int TotalPassedTests = (int)dgvLocalDrivingLicenseApplications.CurrentRow.Cells[5].Value;
 
-            //bool LicenseExists = LocalDrivingLicenseApplication.IsLicenseIssued();
+           bool LicenseExists = LocalDrivingLicenseApplication.IsLicenseIssued();
 
 
-            //issueDrivingLicenseFirstTimeToolStripMenuItem.Enabled = (TotalPassedTests == 3) && !LicenseExists;
+           issueDrivingLicenseFirstTimeToolStripMenuItem.Enabled = (TotalPassedTests == 3) && !LicenseExists;
 
-            // showLicenseToolStripMenuItem.Enabled = LicenseExists;
-            // editToolStripMenuItem.Enabled = !LicenseExists && (LocalDrivingLicenseApplication.ApplicationStatus == clsApplication.enApplicationStatus.New);
-            // ScheduleTestsMenue.Enabled = !LicenseExists;
+            showLicenseToolStripMenuItem.Enabled = LicenseExists;
+            editToolStripMenuItem.Enabled = !LicenseExists && (LocalDrivingLicenseApplication.ApplicationStatus == clsApplication.enApplicationStatus.New);
+            ScheduleTestsMenue.Enabled = !LicenseExists;
 
 
             CancelApplicaitonToolStripMenuItem.Enabled = (LocalDrivingLicenseApplication.ApplicationStatus == clsApplication.enApplicationStatus.New);
 
 
-            DeleteApplicationToolStripMenuItem.Enabled =
-                (LocalDrivingLicenseApplication.ApplicationStatus == clsApplication.enApplicationStatus.New);
-
+            DeleteApplicationToolStripMenuItem.Enabled = (LocalDrivingLicenseApplication.ApplicationStatus == clsApplication.enApplicationStatus.New);
 
 
             bool PassedVisionTest = LocalDrivingLicenseApplication.DoesPassTestType(clsTestsTypes.enTestType.VisionTest); ;
@@ -321,6 +321,62 @@ namespace DVLD.Applications.Local_Driving_License
         private void scheduleStreetTestToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             _ScheduleTest(clsTestsTypes.enTestType.StreetTest);
+        }
+
+        private void issueDrivingLicenseFirstTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dgvLocalDrivingLicenseApplications.CurrentRow != null)
+            {
+                int LocalDrivingLicenseAppID = Convert.ToInt32(dgvLocalDrivingLicenseApplications.CurrentRow.Cells[0].Value);
+
+
+                if (LocalDrivingLicenseAppID != -1)
+                {
+
+                      frmIssueLicenseFirstTime frm = new frmIssueLicenseFirstTime(LocalDrivingLicenseAppID);
+                     frm.ShowDialog();
+                    _Load();
+                }
+
+            }
+        }
+
+        private void showLicenseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dgvLocalDrivingLicenseApplications.CurrentRow != null)
+            {
+                int LocalDrivingLicenseAppID = Convert.ToInt32(dgvLocalDrivingLicenseApplications.CurrentRow.Cells[0].Value);
+                clsLocalDrivingLicenseApplication LA = clsLocalDrivingLicenseApplication.FindByLocalDrivingLicenseApplicationID(LocalDrivingLicenseAppID);
+
+                int _LicenseID = clsLicense.GetActiveLicenseIDByPersonID(LA.ApplicantPersonID, LA.LicenseClassID);
+
+                if (_LicenseID != -1)
+                {
+                    frmShowLicenseInfo frm = new frmShowLicenseInfo(_LicenseID);
+                    frm.ShowDialog();
+                    _Load();
+                }
+
+            }
+        }
+
+        private void showPersonLicenseHistoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dgvLocalDrivingLicenseApplications.CurrentRow != null)
+            {
+                int LocalDrivingLicenseAppID = Convert.ToInt32(dgvLocalDrivingLicenseApplications.CurrentRow.Cells[0].Value);
+                clsLocalDrivingLicenseApplication LA = clsLocalDrivingLicenseApplication.FindByLocalDrivingLicenseApplicationID(LocalDrivingLicenseAppID);
+                int PersonID = LA.ApplicantPersonID; 
+
+                if (PersonID != -1)
+                {
+
+                    frmShowPersonLicenseHistory frm = new frmShowPersonLicenseHistory(PersonID);
+                    frm.ShowDialog();
+                    _Load();
+                }
+
+            }
         }
     }
 }

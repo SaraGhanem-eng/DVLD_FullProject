@@ -12,7 +12,7 @@ namespace DVLD.GLobal_Classes
 
     public class clsUtil
     {
-        static string ImagesFolder = @"C:\DVLD-People-Images";
+       public static string ImagesFolder = @"C:\DVLD-People-Images";
 
 
         static public  bool DeleteImage(string ImagePath)

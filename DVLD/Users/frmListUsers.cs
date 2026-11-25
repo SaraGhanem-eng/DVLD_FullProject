@@ -69,7 +69,7 @@ namespace DVLD.Users
                 cbIsActive.Visible = false;
                 txtFilterValue.Enabled = false;
                 
-
+                
             }
             else if (cbFilterBy.SelectedIndex == 5 )
             {

@@ -1,5 +1,6 @@
 ﻿using DVLD.DataAccess;
 using System;
+using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
 using static System.Net.Mime.MediaTypeNames;
@@ -161,9 +162,70 @@ namespace DVLD.Business
            return clsLocalDrivingLicenseApplicationData.GetActiveApplicationIDForLicenseClass(PersonID, LicenseClassID);
         }
 
+        public bool IsLicenseIssued()
+        {
+            return (GetActiveLicenseID() != -1);
+        }
+
+        public int GetActiveLicenseID()
+        {
+            return clsLicense.GetActiveLicenseIDByPersonID(this.ApplicantPersonID, this.LicenseClassID);
+        }
         public bool DoesPassTestType(clsTestsTypes.enTestType TestTypeID)
         {
             return clsLocalDrivingLicenseApplicationData.DoesPassTestType(this.LocalDrivingLicenseApplicationID, (int)TestTypeID);
+        }
+
+        public bool DoesPassAllTests()
+        {
+            return DoesPassTestType(clsTestsTypes.enTestType.VisionTest) &&
+                   DoesPassTestType(clsTestsTypes.enTestType.WrittenTest) &&
+                   DoesPassTestType(clsTestsTypes.enTestType.StreetTest);
+        }
+        
+        public int IssueLicenseForFirstTime(int CreatedByUserID , string Notes )
+        {
+            int DriverID = -1 ;
+
+            if (!DoesPassAllTests())
+                return -1;
+
+            if (clsLicense.GetActiveLicenseIDByPersonID(ApplicantPersonID , LicenseClassID) != -1)
+                return -1 ;
+
+            clsDrivers Driver = clsDrivers.FindByPersonID(ApplicantPersonID);
+
+           if (Driver == null )
+           {
+                Driver = new clsDrivers();
+
+                Driver.PersonID = ApplicantPersonID;
+                Driver.CreatedByUserID = CreatedByUserID;
+
+                if (!Driver.Save())
+                    return -1;
+
+            }
+            DriverID = Driver.DriverID;
+
+            clsLicense newLicense = new clsLicense();
+            newLicense.ApplicationID = ApplicationID;
+            newLicense.CreatedByUserID = CreatedByUserID;
+            newLicense.DriverID =  DriverID ;
+            newLicense.LicenseClass = LicenseClassID;
+            newLicense.IssueDate = DateTime.Now;
+            newLicense.ExpirationDate = DateTime.Now.AddYears(this.LicenseClassInfo.DefaultValidityLength);
+            newLicense.PaidFees = LicenseClassInfo.ClassFees;
+            newLicense.IssueReason = clsLicense.enIssueReason.FirstTime;
+            newLicense.Notes = Notes;
+
+            if (newLicense.Save())
+            {
+                this.SetComplete();
+                return newLicense.LicenseID;
+            }
+            return -1;
+
         }
     }
 }
